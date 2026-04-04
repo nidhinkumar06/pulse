@@ -36,10 +36,8 @@ RUN bunx prisma generate
 
 # Pre-install all MCP server packages so they don't download at runtime
 RUN npm install -g \
-  @modelcontextprotocol/server-google-calendar \
-  @modelcontextprotocol/server-google-tasks \
-  @modelcontextprotocol/server-notion \
-  @modelcontextprotocol/server-filesystem
+  @modelcontextprotocol/server-filesystem \
+  @notionhq/notion-mcp-server
 
 COPY --from=builder /app/dist ./dist
 

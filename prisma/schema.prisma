@@ -1,0 +1,88 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+// ── Enums ──────────────────────────────────────────────────────────────────
+
+enum TaskStatus {
+    pending
+    in_progress
+    completed
+    cancelled
+}
+
+enum TaskPriority {
+    low
+    medium
+    high
+    urgent
+}
+
+// ── Models ─────────────────────────────────────────────────────────────────
+
+model Task {
+    id          String       @id @default(uuid())
+    title       String
+    description String       @default("")
+    status      TaskStatus   @default(pending)
+    priority    TaskPriority @default(medium)
+    dueDate     DateTime?    @map("due_date")
+    tags        String       @default("")
+    createdAt   DateTime     @default(now()) @map("created_at")
+    updatedAt   DateTime     @updatedAt @map("updated_at")
+
+    events CalendarEvent[]
+    notes  Note[]
+
+    @@map("tasks")
+}
+
+model CalendarEvent {
+    id          String   @id @default(uuid())
+    title       String
+    description String   @default("")
+    startTime   DateTime @map("start_time")
+    endTime     DateTime @map("end_time")
+    location    String   @default("")
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @updatedAt @map("updated_at")
+
+    taskId String? @map("task_id")
+    task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+    @@map("calendar_events")
+}
+
+model Note {
+    id        String   @id @default(uuid())
+    title     String
+    content   String   @default("")
+    tags      String   @default("")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    taskId String? @map("task_id")
+    task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+    @@map("notes")
+}
+
+model WorkflowLog {
+    id        String   @id @default(uuid())
+    sessionId String   @map("session_id")
+    agentName String   @map("agent_name")
+    action    String
+    input     String   @default("")
+    output    String   @default("")
+    timestamp DateTime @default(now())
+
+    @@index([sessionId])
+    @@map("workflow_logs")
+}

@@ -1,0 +1,124 @@
+name: Deploy Pulse to Cloud Run
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+env:
+  REGION: asia-south1 # change to your preferred region
+  SERVICE_NAME: pulse
+  IMAGE: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/pulse/app
+
+jobs:
+  deploy:
+    name: Build & Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── 2. Authenticate to Google Cloud ───────────────────────────────
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # ── 3. Setup gcloud CLI ────────────────────────────────────────────
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      # ── 4. Setup Bun ───────────────────────────────────────────────────
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # ── 5. Install dependencies & build ───────────────────────────────
+      - name: Install & Build
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+
+      # ── 6. Create Artifact Registry repo (idempotent) ─────────────────
+      - name: Ensure Artifact Registry repo exists
+        run: |
+          gcloud artifacts repositories describe pulse \
+            --location=${{ env.REGION }} \
+            --project=${{ secrets.GCP_PROJECT_ID }} 2>/dev/null || \
+          gcloud artifacts repositories create pulse \
+            --repository-format=docker \
+            --location=${{ env.REGION }} \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --description="ADK Multi-Agent Docker images"
+
+      # ── 7. Configure Docker auth for Artifact Registry ────────────────
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      # ── 8. Build & push Docker image ───────────────────────────────────
+      - name: Build & push Docker image
+        run: |
+          docker build \
+            --tag ${{ env.IMAGE }}:${{ github.sha }} \
+            --tag ${{ env.IMAGE }}:latest \
+            .
+          docker push ${{ env.IMAGE }}:${{ github.sha }}
+          docker push ${{ env.IMAGE }}:latest
+
+      # ── 9. Run Prisma migrations against NeonDB ────────────────────────
+      # Runs migrations from CI before deploying — safe, idempotent
+      - name: Run Prisma migrations
+        run: bunx prisma migrate deploy
+        env:
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      # ── 10. Deploy to Cloud Run ────────────────────────────────────────
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image=${{ env.IMAGE }}:${{ github.sha }} \
+            --region=${{ env.REGION }} \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --platform=managed \
+            --min-instances=0 \
+            --max-instances=10 \
+            --memory=512Mi \
+            --cpu=1 \
+            --timeout=60 \
+            --concurrency=80 \
+            --port=8080 \
+            --set-env-vars="NODE_ENV=production,GOOGLE_GENAI_USE_VERTEXAI=true,GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }},GOOGLE_CLOUD_LOCATION=${{ env.REGION }}" \
+            --set-secrets="DATABASE_URL=neon-database-url:latest,DIRECT_DATABASE_URL=neon-direct-url:latest,GOOGLE_API_KEY=google-api-key:latest"
+
+      # ── 11. Allow public access ────────────────────────────────────────
+      - name: Allow unauthenticated access
+        run: |
+          gcloud run services add-iam-policy-binding ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --member="allUsers" \
+            --role="roles/run.invoker"
+
+      # ── 12. Print live URL ─────────────────────────────────────────────
+      - name: Get deployed service URL
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --format="value(status.url)")
+          echo ""
+          echo "✅ ADK Multi-Agent is live at: $URL"
+          echo ""
+          echo "Test it:"
+          echo "  curl \$URL/api/health"
+          echo "  curl -X POST \$URL/api/chat -H 'Content-Type: application/json' -d '{\"message\": \"hi\"}'"
+          echo "## ✅ Deployed!" >> $GITHUB_STEP_SUMMARY
+          echo "**Live URL:** $URL" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ env.IMAGE }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY

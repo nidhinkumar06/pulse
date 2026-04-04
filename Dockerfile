@@ -23,7 +23,7 @@ WORKDIR /app
 
 RUN apk add --no-cache tini
 
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 COPY prisma/ ./prisma/
 
 # Install production deps only

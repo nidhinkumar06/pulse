@@ -9,7 +9,7 @@ if (!process.env.GOOGLE_GENAI_API_KEY) {
 }
 
 if (!process.env.DATABASE_URL) {
-  console.error("DATABASE_URL is not set. Get it from your Neon dashboard.");
+  console.error("DATABASE_URL is not set.");
   process.exit(1);
 }
 

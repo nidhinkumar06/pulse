@@ -50,8 +50,8 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Notion MCP",
     description: "Read and write Notion pages and databases.",
     params: {
-      command: "node",
-      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-notion/dist/index.js"],
+      command: "npx",
+      args: ["-y", "@notionhq/notion-mcp-server"], 
       env: {
         NOTION_API_KEY: process.env.NOTION_API_KEY ?? "",
       },

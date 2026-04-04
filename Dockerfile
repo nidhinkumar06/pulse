@@ -37,7 +37,8 @@ RUN bunx prisma generate
 # Pre-install all MCP server packages so they don't download at runtime
 RUN npm install -g \
   @modelcontextprotocol/server-filesystem \
-  @notionhq/notion-mcp-server
+  @notionhq/notion-mcp-server && \
+    find /usr/local/lib/node_modules/@notionhq/notion-mcp-server -name "index.js" | head -5
 
 COPY --from=builder /app/dist ./dist
 

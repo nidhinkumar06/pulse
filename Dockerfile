@@ -36,8 +36,7 @@ RUN bunx prisma generate
 
 # Pre-install all MCP server packages so they don't download at runtime
 RUN npm install -g \
-  @modelcontextprotocol/server-google-calendar && \
-    find /usr/local/lib/node_modules/@modelcontextprotocol/server-google-calendar -name "index.js" | head -5 \
+  @modelcontextprotocol/server-google-calendar \
   @modelcontextprotocol/server-google-tasks \
   @modelcontextprotocol/server-notion \
   @modelcontextprotocol/server-filesystem

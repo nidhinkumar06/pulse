@@ -10,6 +10,11 @@ import {
   listTasksTool,
   updateTaskTool,
 } from "../../tools/toolRegistry";
+import { getMcpToolsets } from "../../mcp/mcpConfig";
+
+const mcpTools = (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_REFRESH_TOKEN)
+  ? await getMcpToolsets(["google-tasks"])
+  : [];
 
 export const taskAgent = new LlmAgent({
   name: TaskAgentModel.name,
@@ -24,5 +29,6 @@ export const taskAgent = new LlmAgent({
     deleteTaskTool,
     completeTaskTool,
     getTaskSummaryTool,
+    ...mcpTools
   ],
 });

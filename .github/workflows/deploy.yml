@@ -95,7 +95,7 @@ jobs:
             --concurrency=80 \
             --port=8080 \
             --set-env-vars="NODE_ENV=production,GOOGLE_GENAI_USE_VERTEXAI=true,GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }},GOOGLE_CLOUD_LOCATION=${{ env.REGION }}" \
-            --set-secrets="DATABASE_URL=neon-database-url:latest,DIRECT_DATABASE_URL=neon-direct-url:latest,GOOGLE_API_KEY=google-api-key:latest"
+            --set-secrets="DATABASE_URL=neon-database-url:latest,\DIRECT_DATABASE_URL=neon-direct-url:latest,\GOOGLE_API_KEY=google-api-key:latest,\GOOGLE_CLIENT_ID=google-client-id:latest,\GOOGLE_CLIENT_SECRET=google-client-secret:latest,\GOOGLE_REFRESH_TOKEN=google-refresh-token:latest,\NOTION_API_KEY=notion-api-key:latest
 
       # ── 11. Allow public access ────────────────────────────────────────
       - name: Allow unauthenticated access

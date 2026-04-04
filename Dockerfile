@@ -21,6 +21,8 @@ FROM oven/bun:1-alpine AS production
 
 WORKDIR /app
 
+RUN apk add --no-cache tini nodejs npm
+
 RUN apk add --no-cache tini
 
 COPY package.json bun.lock ./

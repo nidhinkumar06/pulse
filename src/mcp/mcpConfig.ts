@@ -22,7 +22,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     description:
       "Read and write Google Calendar events via official MCP server.",
     params: {
-      command: "npx",
+      command: "bunx",
       args: ["-y", "@modelcontextprotocol/server-google-calendar"],
       env: {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
@@ -36,7 +36,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Google Tasks MCP",
     description: "Sync tasks with Google Tasks.",
     params: {
-      command: "npx",
+      command: "bunx",
       args: ["-y", "@modelcontextprotocol/server-google-tasks"],
       env: {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
@@ -50,7 +50,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Notion MCP",
     description: "Read and write Notion pages and databases.",
     params: {
-      command: "npx",
+      command: "bunx",
       args: ["-y", "@modelcontextprotocol/server-notion"],
       env: {
         NOTION_API_KEY: process.env.NOTION_API_KEY ?? "",
@@ -62,7 +62,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Filesystem MCP",
     description: "Read/write local files (for note export, attachments, etc.).",
     params: {
-      command: "npx",
+      command: "bunx",
       args: [
         "-y",
         "@modelcontextprotocol/server-filesystem",
@@ -75,7 +75,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Brave Search MCP",
     description: "Web search capability for research tasks.",
     params: {
-      command: "npx",
+      command: "bunx",
       args: ["-y", "@modelcontextprotocol/server-brave-search"],
       env: {
         BRAVE_API_KEY: process.env.BRAVE_API_KEY ?? "",

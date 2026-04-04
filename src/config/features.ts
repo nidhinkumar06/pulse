@@ -1,19 +1,3 @@
-/**
- * config/features.ts
- *
- * Feature-flag system for the ADK multi-agent platform.
- *
- * ─── HOW TO USE ───────────────────────────────────────────────────────────
- *
- *  • Add a flag to the FLAGS map below (default: disabled).
- *  • Enable it via environment variable: FEATURE_<NAME>=true in .env
- *  • Check it anywhere: if (features.isEnabled("email_agent")) { ... }
- *
- * This lets you safely develop and ship new features without breaking
- * existing behaviour — just gate the new code behind a flag.
- * ──────────────────────────────────────────────────────────────────────────
- */
-
 type FeatureFlag =
   // ── Current agents ──────────────────────────────
   | "task_agent"

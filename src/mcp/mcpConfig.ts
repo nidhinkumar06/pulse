@@ -22,8 +22,8 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     description:
       "Read and write Google Calendar events via official MCP server.",
     params: {
-      command: "bunx",
-      args: ["-y", "@modelcontextprotocol/server-google-calendar"],
+      command: "node",
+      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-google-calendar/dist/index.js"],
       env: {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
@@ -36,8 +36,8 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Google Tasks MCP",
     description: "Sync tasks with Google Tasks.",
     params: {
-      command: "bunx",
-      args: ["-y", "@modelcontextprotocol/server-google-tasks"],
+      command: "node",
+      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-google-tasks/dist/index.js"],
       env: {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
@@ -50,8 +50,8 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Notion MCP",
     description: "Read and write Notion pages and databases.",
     params: {
-      command: "bunx",
-      args: ["-y", "@modelcontextprotocol/server-notion"],
+      command: "node",
+      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-notion/dist/index.js"],
       env: {
         NOTION_API_KEY: process.env.NOTION_API_KEY ?? "",
       },
@@ -62,10 +62,9 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Filesystem MCP",
     description: "Read/write local files (for note export, attachments, etc.).",
     params: {
-      command: "bunx",
+      command: "node",
       args: [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
+        "/usr/local/lib/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
         process.env.MCP_FS_ROOT ?? "./workspace",
       ],
     } satisfies StdioServerParameters,
@@ -75,8 +74,8 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     label: "Brave Search MCP",
     description: "Web search capability for research tasks.",
     params: {
-      command: "bunx",
-      args: ["-y", "@modelcontextprotocol/server-brave-search"],
+      command: "node",
+      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-brave-search/dist/index.js"],
       env: {
         BRAVE_API_KEY: process.env.BRAVE_API_KEY ?? "",
       },

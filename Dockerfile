@@ -41,4 +41,4 @@ EXPOSE 8080
 
 # Run migrations then start — prisma migrate deploy is idempotent
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["sh", "-c", "bunx prisma migrate deploy && bun dist/index.js"]
+CMD ["bun", "dist/index.js"]

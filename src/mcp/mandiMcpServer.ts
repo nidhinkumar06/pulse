@@ -4,7 +4,7 @@ import { z } from "zod";
 import {
   getMandiPrices,
   getBestMandiToSell,
-} from "../tools/mandi/mandiPriceTool";
+} from "../tools/mandi/mandiPriceTool.js";
 
 const server = new McpServer({
   name: "mandi-price-server",

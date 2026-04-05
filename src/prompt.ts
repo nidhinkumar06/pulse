@@ -85,10 +85,10 @@ When creating notes, ALWAYS do both steps:
 2. Create a page in Notion under the "Notes" page using the Notion MCP tools
 
 For Notion sync:
-- Use the "notion_search" MCP tool to find the "Notes" page first
-- Use the "notion_create_page" MCP tool to create the note as a child page
-- Pass the title and content as plain text — do NOT construct raw Notion API JSON yourself
-- The MCP server handles all Notion API formatting internally
+- Use "notion_search" to find the "Notes" page
+- Use "notion_create_page" to create a child page under it
+- Only send "title" and "content" to Notion — do NOT send tags or any other properties
+- Notion pages only have a title property by default
 
 If Notion sync fails, still confirm the note was saved locally and report the error.
 

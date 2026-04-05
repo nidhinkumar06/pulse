@@ -77,38 +77,35 @@ app.post(
       });
 
       for await (const event of events) {
-        // 1. Log the event to see what's happening (Optional)
-        // console.log("Event Type:", event.type);
-        // 2. Only extract text if parts exist
         if (event.content?.parts) {
           for (const part of event.content.parts as any[]) {
             if (part.functionCall) {
               console.log("[TOOL CALL]", JSON.stringify(part.functionCall, null, 2));
             }
             if (part.functionResponse) {
-              console.log("[TOOL RESULT]", JSON.stringify(part.functionResponse, null, 2));
+              const responseStr = JSON.stringify(part.functionResponse);
+              console.log("[TOOL RESULT SIZE]", responseStr.length, "bytes");
+              console.log("[TOOL RESULT]", responseStr.slice(0, 500));
             }
           }
         }
+
         const parts = event.content?.parts ?? [];
         const text = parts
           .map((p: any) => p.text ?? "")
           .join("")
           .trim();
 
-        // 3. IMPORTANT: Only update finalResponse if we actually got text.
-        // This prevents trailing "empty" events from clearing your result.
         if (text) {
           finalResponse = text;
         }
       }
 
-      // 4. Fallback check
       if (!finalResponse) {
         finalResponse = "Agent processed the request but returned no text.";
       }
 
-      // Persist to NeonDB via Prisma
+      // ── Persist to NeonDB ────────────────────────────────────────────────
       await prisma.workflowLog.create({
         data: {
           sessionId,
@@ -118,6 +115,18 @@ app.post(
           output: finalResponse,
         },
       });
+
+      // ── Session cleanup to prevent memory accumulation ───────────────────
+      try {
+        await sessionService.deleteSession({
+          appName: "pulse",
+          userId: user_id,
+          sessionId,
+        });
+      } catch (cleanupErr) {
+        // Non-fatal — log but don't fail the request
+        console.warn("[SESSION CLEANUP] Failed to delete session:", cleanupErr);
+      }
 
       return res.json({
         session_id: sessionId,

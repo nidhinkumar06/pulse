@@ -6,9 +6,7 @@ import { StdioServerParameters } from "@modelcontextprotocol/sdk/client/stdio.js
 export type McpServerKey =
   // | "google-calendar"
   // | "google-tasks"
-  | "notion"
-  | "filesystem"
-  | "brave-search";
+  "notion" | "filesystem" | "brave-search";
 
 interface McpServerConfig {
   label: string;
@@ -51,11 +49,17 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     description: "Read and write Notion pages and databases.",
     params: {
       command: "npx",
-      args: ["-y", "@notionhq/notion-mcp-server"], 
-      env: {
-        NOTION_TOKEN: process.env.NOTION_API_KEY ?? "",
+      args: ["-y", "@notionhq/notion-mcp-server"],
+      get env() {
+        return {
+          NOTION_TOKEN: process.env.NOTION_API_KEY ?? "",
+          OPENAPI_MCP_HEADERS: JSON.stringify({
+            Authorization: `Bearer ${process.env.NOTION_API_KEY ?? ""}`,
+            "Notion-Version": "2025-09-03",
+          }),
+        };
       },
-    } satisfies StdioServerParameters,
+    },
   },
 
   filesystem: {
@@ -75,7 +79,9 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     description: "Web search capability for research tasks.",
     params: {
       command: "node",
-      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-brave-search/dist/index.js"],
+      args: [
+        "/usr/local/lib/node_modules/@modelcontextprotocol/server-brave-search/dist/index.js",
+      ],
       env: {
         BRAVE_API_KEY: process.env.BRAVE_API_KEY ?? "",
       },

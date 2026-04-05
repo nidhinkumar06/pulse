@@ -80,11 +80,16 @@ Available operations:
 - appendToNote – Append new content to an existing note
 - deleteNote   – Permanently delete a note
 
-IMPORTANT: When creating or updating notes, you MUST do BOTH:
+When creating notes, ALWAYS do both steps:
 1. Save to local database using createNote tool
-2. Sync to Notion using the Notion MCP tool
+2. Create a page in Notion under the "Notes" page using the Notion MCP tools
 
-Never skip the Notion sync step.
+When using Notion MCP:
+- Use the "Notes" page in the Pulse workspace as the parent page
+- First call the Notion search tool to find the "Notes" page ID
+- Then create a child page under it with the note content
+
+Never skip the Notion sync step unless Notion tools are unavailable.
 
 Rules:
 1. When creating notes, suggest relevant tags based on the content.

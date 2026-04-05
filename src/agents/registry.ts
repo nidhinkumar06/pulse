@@ -7,15 +7,17 @@ import { calendarAgent } from "./subagents/calendarAgent.js";
 import { notesAgent }    from "./subagents/notesAgent.js";
 import { mandiAgent } from "./subagents/mandiAgent.js";
 import { schemesAgent } from "./subagents/schemesAgent.js";
+import { cropAgent } from "./subagents/cropAgent.js";
 
 // ── Registry: add every sub-agent here ────────────────────────────────────
 
 export const AGENT_REGISTRY: LlmAgent[] = [
+  cropAgent,
+  mandiAgent,
+  schemesAgent,
   taskAgent,
   calendarAgent,
-  notesAgent,
-  mandiAgent,
-  schemesAgent
+  notesAgent
 ];
 
 /**

@@ -11,11 +11,6 @@ import {
 } from "../../tools/toolRegistry";
 import { CalendarAgentModel } from "../../config";
 import { CalendarAgentPrompt } from "../../prompt";
-import { getMcpToolsets } from "../../mcp/mcpConfig";
-
-// const mcpTools = (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_REFRESH_TOKEN)
-//   ? await getMcpToolsets(["google-calendar"])
-//   : [];
 
 export const calendarAgent = new LlmAgent({
   name: CalendarAgentModel.name,
@@ -31,7 +26,6 @@ export const calendarAgent = new LlmAgent({
     updateEventTool,
     deleteEventTool,
     checkAvailabilityTool,
-    getTodayAgendaTool,
-    // ...mcpTools,
+    getTodayAgendaTool
   ],
 });

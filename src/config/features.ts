@@ -3,6 +3,7 @@ type FeatureFlag =
   | "task_agent"
   | "calendar_agent"
   | "notes_agent"
+  | "crop_agent"
   | "mandi_agent"
   | "schemes_agent"
   // ── Planned agents / features ───────────────────
@@ -26,6 +27,7 @@ const DEFAULTS: Record<FeatureFlag, boolean> = {
   task_agent: true,
   calendar_agent: true,
   notes_agent: true,
+  crop_agent: true,
   mandi_agent: true,
   schemes_agent: true,
   // Planned — flip to true (or set env var) when ready

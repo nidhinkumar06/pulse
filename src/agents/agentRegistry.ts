@@ -6,17 +6,19 @@ import { calendarAgent } from "./subagents/calendarAgent.js";
 import { notesAgent }    from "./subagents/notesAgent.js";
 import { schemesAgent } from "./subagents/schemesAgent.js";
 import { mandiAgent } from "./subagents/mandiAgent.js";
+import { cropAgent } from "./subagents/cropAgent.js";
 
 /**
  * Add every sub-agent here. The orchestrator reads this list at startup.
  * Order determines tool declaration order (no functional impact).
  */
 export const AGENT_REGISTRY: LlmAgent[] = [
+  mandiAgent,
+  schemesAgent,
+  cropAgent,
   taskAgent,
   calendarAgent,
-  notesAgent,
-  mandiAgent,
-  schemesAgent
+  notesAgent
 ];
 
 export function buildAgentTools(): AgentTool[] {

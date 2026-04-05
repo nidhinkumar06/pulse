@@ -1,11 +1,7 @@
 import { MCPToolset } from "@google/adk";
 import { StdioServerParameters } from "@modelcontextprotocol/sdk/client/stdio.js";
 
-// ── Server registry ────────────────────────────────────────────────────────
-
 export type McpServerKey =
-  // | "google-calendar"
-  // | "google-tasks"
   | "notion"
   | "filesystem"
   | "serper-search"
@@ -18,34 +14,17 @@ interface McpServerConfig {
 }
 
 export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
-  // "google-calendar": {
-  //   label: "Google Calendar MCP",
-  //   description:
-  //     "Read and write Google Calendar events via official MCP server.",
-  //   params: {
-  //     command: "node",
-  //     args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-google-calendar/dist/index.js"],
-  //     env: {
-  //       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
-  //       GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
-  //       GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN ?? "",
-  //     },
-  //   } satisfies StdioServerParameters,
-  // },
-
-  // "google-tasks": {
-  //   label: "Google Tasks MCP",
-  //   description: "Sync tasks with Google Tasks.",
-  //   params: {
-  //     command: "node",
-  //     args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-google-tasks/dist/index.js"],
-  //     env: {
-  //       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? "",
-  //       GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? "",
-  //       GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN ?? "",
-  //     },
-  //   } satisfies StdioServerParameters,
-  // },
+  "mandi-prices": {
+    label: "Mandi Price MCP",
+    description: "Live crop prices from Agmarknet (data.gov.in) via government API.",
+    params: {
+      command: "node",
+      args: ["dist/mcp/mandiMcpServer.js"],
+      env: {
+        DATA_GOV_IN_API_KEY: process.env.DATA_GOV_IN_API_KEY ?? "",
+      },
+    } satisfies StdioServerParameters,
+  },
 
   notion: {
     label: "Notion MCP",
@@ -82,18 +61,6 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
       },
     } satisfies StdioServerParameters,
   },
-
-  "mandi-prices": {
-    label: "Mandi Price MCP",
-    description: "Live crop prices from Agmarknet (data.gov.in) via government API.",
-    params: {
-      command: "node",
-      args: ["dist/mcp/mandiMcpServer.js"],
-      env: {
-        DATA_GOV_IN_API_KEY: process.env.DATA_GOV_IN_API_KEY ?? "",
-      },
-    } satisfies StdioServerParameters,
-  }
 };
 
 // ── Helper: build MCPToolset instances for requested servers ───────────────
@@ -118,25 +85,5 @@ export async function getMcpToolsets(
       // Move the SDK params into this nested object
       serverParams: config.params,
     });
-  });
-}
-
-/**
- * Build the calendar agent with real Google Calendar MCP tools.
- * Call this instead of the static calendarAgent when Google OAuth is configured.
- */
-export async function buildCalendarAgentWithMcp() {
-  const { LlmAgent } = await import("@google/adk");
-  // const mcpTools = await getMcpToolsets(["google-calendar"]);
-
-  return new LlmAgent({
-    name: "calendar_agent_mcp",
-    model: "gemini-2.0-flash",
-    description: "Calendar agent powered by Google Calendar via MCP.",
-    instruction: `
-You manage Google Calendar events. Use the MCP tools to read and create events.
-Always check for conflicts before scheduling. Present times in a human-readable format.
-    `.trim(),
-    // tools: mcpTools,
   });
 }

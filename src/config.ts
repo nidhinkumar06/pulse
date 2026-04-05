@@ -27,3 +27,8 @@ export const SchemesAgentModel = {
   name: "schemes_agent",
   model: AgentModel.model,
 }
+
+export const CropAgentModel = {
+  name: "crop_agent",
+  model: AgentModel.model
+}

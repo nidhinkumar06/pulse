@@ -7,7 +7,7 @@ type FeatureFlag =
   | "email_agent" // Compose and manage emails
   | "reminder_agent" // Push notifications / reminders
   | "analytics_agent" // Productivity insights & reports
-  | "web_search_agent" // Real-time web search via Brave MCP
+  | "web_search_agent" // Real-time web search via Serper MCP
   | "file_agent" // Attach files to tasks/notes
   | "voice_input" // Speech-to-text input
   | "recurring_tasks" // Cron-style repeating tasks

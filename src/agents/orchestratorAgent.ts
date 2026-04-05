@@ -3,6 +3,11 @@ import { AgentModel } from "../config";
 import { LlmAgent } from "@google/adk";
 import { getAgentTools, getAgentDescriptions } from "./registry.js";
 import { OrchestratorAgentPrompt } from "../prompt";
+import { getMcpToolsets } from "../mcp/mcpConfig";
+
+const serperTools = process.env.SERPER_API_KEY
+  ? await getMcpToolsets(["serper-search"])
+  : [];
 
 export const orchestratorAgent = new LlmAgent({
   name: AgentModel.name,
@@ -15,7 +20,10 @@ export const orchestratorAgent = new LlmAgent({
      ${OrchestratorAgentPrompt.instruction}`
   .trim(),
   // Loaded automatically from the registry
-  tools: getAgentTools(),
+  tools: [
+    ...getAgentTools(),
+    ...serperTools
+  ]  
 });
 
 export default orchestratorAgent;

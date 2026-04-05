@@ -8,7 +8,7 @@ export type McpServerKey =
   // | "google-tasks"
   | "notion"
   | "filesystem"
-  | "brave-search";
+  | "serper-search";
 
 interface McpServerConfig {
   label: string;
@@ -70,14 +70,14 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
     } satisfies StdioServerParameters,
   },
 
-  "brave-search": {
-    label: "Brave Search MCP",
+  "serper-search": {
+    label: "Serper Search MCP",
     description: "Web search capability for research tasks.",
     params: {
-      command: "node",
-      args: ["/usr/local/lib/node_modules/@modelcontextprotocol/server-brave-search/dist/index.js"],
+      command: "npx",
+      args: ["-y", "serper-search-scrape-mcp-server"],
       env: {
-        BRAVE_API_KEY: process.env.BRAVE_API_KEY ?? "",
+        SERPER_API_KEY: process.env.SERPER_API_KEY ?? "",
       },
     } satisfies StdioServerParameters,
   },

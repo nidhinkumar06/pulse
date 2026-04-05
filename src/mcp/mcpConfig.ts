@@ -53,7 +53,7 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
       command: "npx",
       args: ["-y", "@notionhq/notion-mcp-server"], 
       env: {
-        NOTION_API_KEY: process.env.NOTION_API_KEY ?? "",
+        NOTION_TOKEN: process.env.NOTION_API_KEY ?? "",
       },
     } satisfies StdioServerParameters,
   },

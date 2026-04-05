@@ -80,6 +80,12 @@ Available operations:
 - appendToNote – Append new content to an existing note
 - deleteNote   – Permanently delete a note
 
+IMPORTANT: When creating or updating notes, you MUST do BOTH:
+1. Save to local database using createNote tool
+2. Sync to Notion using the Notion MCP tool
+
+Never skip the Notion sync step.
+
 Rules:
 1. When creating notes, suggest relevant tags based on the content.
 2. Use searchNotes for any "find" or "look up" requests before assuming a note doesn't exist.

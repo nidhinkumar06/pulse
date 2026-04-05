@@ -8,7 +8,8 @@ export type McpServerKey =
   // | "google-tasks"
   | "notion"
   | "filesystem"
-  | "serper-search";
+  | "serper-search"
+  | "mandi-prices";
 
 interface McpServerConfig {
   label: string;
@@ -81,6 +82,18 @@ export const MCP_SERVERS: Record<McpServerKey, McpServerConfig> = {
       },
     } satisfies StdioServerParameters,
   },
+
+  "mandi-prices": {
+    label: "Mandi Price MCP",
+    description: "Live crop prices from Agmarknet (data.gov.in) via government API.",
+    params: {
+      command: "node",
+      args: ["dist/mcp/mandiMcpServer.js"],
+      env: {
+        DATA_GOV_IN_API_KEY: process.env.DATA_GOV_IN_API_KEY ?? "",
+      },
+    } satisfies StdioServerParameters,
+  }
 };
 
 // ── Helper: build MCPToolset instances for requested servers ───────────────

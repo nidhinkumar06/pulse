@@ -5,6 +5,8 @@ import { LlmAgent }  from "@google/adk";
 import { taskAgent }     from "./subagents/taskAgent.js";
 import { calendarAgent } from "./subagents/calendarAgent.js";
 import { notesAgent }    from "./subagents/notesAgent.js";
+import { mandiAgent } from "./subagents/mandiAgent.js";
+import { schemesAgent } from "./subagents/schemesAgent.js";
 
 // ── Registry: add every sub-agent here ────────────────────────────────────
 
@@ -12,6 +14,8 @@ export const AGENT_REGISTRY: LlmAgent[] = [
   taskAgent,
   calendarAgent,
   notesAgent,
+  mandiAgent,
+  schemesAgent
 ];
 
 /**

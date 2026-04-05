@@ -3,6 +3,8 @@ type FeatureFlag =
   | "task_agent"
   | "calendar_agent"
   | "notes_agent"
+  | "mandi_agent"
+  | "schemes_agent"
   // ── Planned agents / features ───────────────────
   | "email_agent" // Compose and manage emails
   | "reminder_agent" // Push notifications / reminders
@@ -24,6 +26,8 @@ const DEFAULTS: Record<FeatureFlag, boolean> = {
   task_agent: true,
   calendar_agent: true,
   notes_agent: true,
+  mandi_agent: true,
+  schemes_agent: true,
   // Planned — flip to true (or set env var) when ready
   email_agent: false,
   reminder_agent: false,

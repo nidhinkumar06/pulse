@@ -4,6 +4,8 @@ import { AgentTool } from "@google/adk";
 import { taskAgent }     from "./subagents/taskAgent.js";
 import { calendarAgent } from "./subagents/calendarAgent.js";
 import { notesAgent }    from "./subagents/notesAgent.js";
+import { schemesAgent } from "./subagents/schemesAgent.js";
+import { mandiAgent } from "./subagents/mandiAgent.js";
 
 /**
  * Add every sub-agent here. The orchestrator reads this list at startup.
@@ -13,6 +15,8 @@ export const AGENT_REGISTRY: LlmAgent[] = [
   taskAgent,
   calendarAgent,
   notesAgent,
+  mandiAgent,
+  schemesAgent
 ];
 
 export function buildAgentTools(): AgentTool[] {

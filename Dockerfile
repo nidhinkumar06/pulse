@@ -42,6 +42,8 @@ RUN npm install -g \
 
 COPY --from=builder /app/dist ./dist
 
+RUN node -e "require('./dist/mcp/mandiMcpServer.js')" 2>/dev/null || true
+
 ENV PORT=8080
 ENV NODE_ENV=production
 

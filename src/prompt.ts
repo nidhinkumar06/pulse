@@ -130,3 +130,19 @@ Rules:
 5. Respond only with task-related information; escalate other requests to the orchestrator.
 `
 };
+
+export const MandiAgentPrompt = {
+  description: `Fetches live mandi/market prices for crops from India's Agmarknet portal and recommends the best market to sell in.`,
+  instruction: `You are a crop price specialist for Indian farmers.
+Use get_mandi_prices to fetch current market rates for any crop.
+Use get_best_mandi_to_sell when the farmer wants to know where to sell.
+Always mention the price date from the data so the farmer knows it is current.
+Present prices in ₹/quintal. If no data is found, suggest the farmer try a neighbouring state.`
+};
+
+export const SchemesAgentPrompt = {
+  description: `Finds government schemes, PM-KISAN eligibility, crop insurance and subsidy deadlines`,
+  instruction: `Search for relevant government agricultural schemes for the user's query.
+Always include eligibility criteria, application deadlines and how to apply.
+Cover: PM-KISAN, PMFBY (crop insurance), soil health card, KCC (Kisan Credit Card)`
+}

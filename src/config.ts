@@ -17,3 +17,13 @@ export const TaskAgentModel = {
   name: "task_agent",
   model: AgentModel.model,
 };
+
+export const MandiAgentModel = {
+  name: "mandi_agent",
+  model: AgentModel.model,
+}
+
+export const SchemesAgentModel = {
+  name: "schemes_agent",
+  model: AgentModel.model,
+}

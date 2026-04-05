@@ -80,6 +80,16 @@ app.post(
         // 1. Log the event to see what's happening (Optional)
         // console.log("Event Type:", event.type);
         // 2. Only extract text if parts exist
+        if (event.content?.parts) {
+          for (const part of event.content.parts as any[]) {
+            if (part.functionCall) {
+              console.log("[TOOL CALL]", JSON.stringify(part.functionCall, null, 2));
+            }
+            if (part.functionResponse) {
+              console.log("[TOOL RESULT]", JSON.stringify(part.functionResponse, null, 2));
+            }
+          }
+        }
         const parts = event.content?.parts ?? [];
         const text = parts
           .map((p: any) => p.text ?? "")

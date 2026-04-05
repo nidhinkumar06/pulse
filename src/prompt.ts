@@ -84,35 +84,11 @@ When creating notes, ALWAYS do both steps:
 1. Save to local database using createNote tool
 2. Create a page in Notion under the "Notes" page using the Notion MCP tools
 
-When using Notion MCP:
-- Use the "Notes" page in the Pulse workspace as the parent page
-- First call the Notion search tool to find the "Notes" page ID
-- Then create a child page under it with the note content
-
-IMPORTANT — When creating a Notion page, the content MUST go in the "children" parameter as blocks, NOT in a "content" property. Use this exact structure:
-
-{
-  "parent": { "page_id": "<NOTES_PAGE_ID>" },
-  "properties": {
-    "title": {
-      "title": [{ "text": { "content": "<NOTE_TITLE>" } }]
-    }
-  },
-  "children": [
-    {
-      "object": "block",
-      "type": "paragraph",
-      "paragraph": {
-        "rich_text": [{ "type": "text", "text": { "content": "<NOTE_CONTENT>" } }]
-      }
-    }
-  ]
-}
-
-Steps for Notion sync:
-1. Search for the "Notes" page using the Notion search tool to get its page_id
-2. Create a child page under it using the structure above with children blocks
-3. Never use a top-level "content" property — always use "children"
+For Notion sync:
+- Use the "notion_search" MCP tool to find the "Notes" page first
+- Use the "notion_create_page" MCP tool to create the note as a child page
+- Pass the title and content as plain text — do NOT construct raw Notion API JSON yourself
+- The MCP server handles all Notion API formatting internally
 
 If Notion sync fails, still confirm the note was saved locally and report the error.
 

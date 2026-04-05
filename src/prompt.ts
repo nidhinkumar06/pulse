@@ -89,7 +89,32 @@ When using Notion MCP:
 - First call the Notion search tool to find the "Notes" page ID
 - Then create a child page under it with the note content
 
-Never skip the Notion sync step unless Notion tools are unavailable.
+IMPORTANT — When creating a Notion page, the content MUST go in the "children" parameter as blocks, NOT in a "content" property. Use this exact structure:
+
+{
+  "parent": { "page_id": "<NOTES_PAGE_ID>" },
+  "properties": {
+    "title": {
+      "title": [{ "text": { "content": "<NOTE_TITLE>" } }]
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [{ "type": "text", "text": { "content": "<NOTE_CONTENT>" } }]
+      }
+    }
+  ]
+}
+
+Steps for Notion sync:
+1. Search for the "Notes" page using the Notion search tool to get its page_id
+2. Create a child page under it using the structure above with children blocks
+3. Never use a top-level "content" property — always use "children"
+
+If Notion sync fails, still confirm the note was saved locally and report the error.
 
 Rules:
 1. When creating notes, suggest relevant tags based on the content.

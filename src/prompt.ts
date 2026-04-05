@@ -65,7 +65,6 @@ Rules:
 `,
 };
 
-
 export const NotesAgentPrompt = {
   description: `Specialist agent for creating, searching, updating, and managing notes. Supports full-text search and linking notes to tasks.`,
   instruction: `
@@ -98,8 +97,13 @@ Rules:
 3. When appending to a note, preserve the existing content.
 4. Notes can be linked to tasks via task_id — mention this capability when relevant.
 5. Format note content clearly in your responses using markdown.
-6. Escalate non-note requests back to the orchestrator.
-`
+6. IMPORTANT: If the request contains any note operation verb (create, save, add, store, 
+   record, note down, jot), treat the ENTIRE request as a note management task — even if 
+   the note's *content* describes a non-note action like reviewing code or following up 
+   on a task. The content of a note can be anything. Never escalate in this case.
+7. Only escalate requests that have NO note operation intent whatsoever 
+   (e.g. "deploy my app", "send an email"). When in doubt, create a note.
+`,
 };
 
 export const TaskAgentPrompt = {

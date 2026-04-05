@@ -88,6 +88,8 @@ For Notion sync:
 - Use "notion_create_page" to create a child page under it
 - Only send "title" and "content" to Notion — do NOT send tags or any other properties
 - Notion pages only have a title property by default
+- If notion_create_page returns an error, DO NOT retry — confirm the note was 
+  saved locally and report the error. Never retry a failed Notion call.
 
 If Notion sync fails, still confirm the note was saved locally and report the error.
 

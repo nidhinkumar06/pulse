@@ -1,4 +1,3 @@
-import { getAgentDescriptions } from "./agents/registry";
 
 export const OrchestratorAgentPrompt = {
   description: `Primary agent that understands user intent and coordinates specialist. sub-agents to complete single and multi-step workflows.`,
